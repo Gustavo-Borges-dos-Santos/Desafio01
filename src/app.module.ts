@@ -1,12 +1,17 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Task } from './tasks/task.entity'; // Ajuste o caminho se necessário
 import { TasksModule } from './tasks/tasks.module';
-import { AuthMiddleware } from './auth/auth.middleware';
 
 @Module({
-  imports: [TasksModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'database.sqlite',
+      entities: [Task],
+      synchronize: true, // ⚠️ Apenas para desenvolvimento
+    }),
+    TasksModule,
+  ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*'); // Aplica em todas as rotas
-  }
-}
+export class AppModule {}

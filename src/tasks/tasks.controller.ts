@@ -1,3 +1,5 @@
+//o controler é onde o NestJS vai receber as requisições HTTP
+
 import { Controller, Post, Get, Patch, Delete, Body, Param } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './task.entity';

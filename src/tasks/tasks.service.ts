@@ -1,3 +1,5 @@
+//O serviço manipula os dados da tarefa e aplica as regras de negócio
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
