@@ -3,7 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Task, TaskStatus } from './task.entity';
+import { Task } from './task.entity';
 
 @Injectable()
 export class TasksService {
@@ -13,10 +13,13 @@ export class TasksService {
   ) {}
 
   // Criar uma nova tarefa
-  async createTask(title: string, description?: string): Promise<Task> {
-    const task = this.taskRepository.create({ title, description });
-    return this.taskRepository.save(task);
+  async createTask(title: string, createdBy: string, description?: string): Promise<Task> {
+    const task = this.taskRepository.create({ title, description, status: 'pending', createdBy });
+    return await this.taskRepository.save(task);
   }
+  
+
+
 
   // Listar todas as tarefas
   async getAllTasks(): Promise<Task[]> {
@@ -28,14 +31,15 @@ export class TasksService {
     return this.taskRepository.findOne({ where: { id } });
   }
 
-  // Atualizar uma tarefa
-  async updateTask(id: number, status: TaskStatus): Promise<Task | null> {
-    const task = await this.getTaskById(id);
-    if (!task) return null;
+// Atualizar uma tarefa
+async updateTask(id: number, status: 'pending' | 'in_progress' | 'completed'): Promise<Task | null> {
+  const task = await this.getTaskById(id);
+  if (!task) return null;
 
-    task.status = status;
-    return this.taskRepository.save(task);
-  }
+  task.status = status;
+  return this.taskRepository.save(task);
+}
+
 
   // Deletar uma tarefa
   async deleteTask(id: number): Promise<boolean> {

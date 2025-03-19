@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Task } from './tasks/task.entity'; // Ajuste o caminho se necessário
-import { TasksModule } from './tasks/tasks.module';
+import { Task } from './tasks/task.entity';
+import { Project } from './project/project.entity';
+import { ProjectModule } from './project/project.module';
+import { TasksModule } from './tasks/tasks.module';  // Adicionando o TasksModule
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'database.sqlite',
-      entities: [Task],
-      synchronize: true, // ⚠️ Apenas para desenvolvimento
+      entities: [Task, Project], // Certifique-se de que Task e Project estão listados nas entidades
+      synchronize: true,
     }),
-    TasksModule,
+    ProjectModule,
+    TasksModule,  // Importando o módulo de tarefas
   ],
 })
 export class AppModule {}

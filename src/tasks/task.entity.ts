@@ -1,10 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
-
-export enum TaskStatus {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-}
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Project } from '../project/project.entity';
 
 @Entity()
 export class Task {
@@ -15,12 +10,33 @@ export class Task {
   title: string;
 
   @Column({ nullable: true })
-  description?: string;
+  description: string;
 
-  // Alteração aqui: Removemos o 'enum' e usamos 'type: string'
-  @Column({ type: 'text', default: TaskStatus.PENDING })
-  status: TaskStatus;
+  @Column({ default: 'pending' })
+  status: 'pending' | 'in_progress' | 'completed';
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column()
+  createdBy: string;
+
+  @Column({ nullable: true })
+  userAssigned: string;
+
+  @Column({ nullable: true })
+  points: number;
+
+  @Column({ type: 'date', nullable: true })
+  initialDateExpected: string;
+
+  @Column({ type: 'date', nullable: true })
+  endDateExpected: string;
+
+  @Column({ type: 'date', nullable: true })
+  initialDate: string;
+
+  @Column({ type: 'date', nullable: true })
+  endDate: string;
+
+  @ManyToOne(() => Project, (project) => project.id)
+  project: Project;
 }
+
